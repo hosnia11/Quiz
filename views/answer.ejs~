@@ -5,8 +5,8 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1> Bienvenido a <%= title %></h1>
-    <p>El portal donde podrá crear sus propios juegos</p>
-    <p><a href="/quizes/question"> Comience a jugar </a></p>
+    <h2> Juego de preguntas</h2>
+    <p> La respuesta es <%= respuesta %>. </p>
+    <p> <a href="/quizes/question"> Intentelo otra vez </a> </p>
   </body>
 </html>
