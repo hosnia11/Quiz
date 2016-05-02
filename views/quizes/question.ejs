@@ -8,8 +8,8 @@
     <h2> Juego de preguntas</h2>
     <form method="get" action="/quizes/answer">
     Pregunta: <%= pregunta %> <p>
-    <input type="text" name="respuesta" value="" placeholder="Indique su respuesta aquí" />
-    <input type="submit"  value="Enviar" />
+    <input type="text" name="respuesta" value="<%= respuesta %>" placeholder="Indique su respuesta aquí" />
+    <input type="submit"  value="Comprobar" />
     </form>
   </body>
 </html>
