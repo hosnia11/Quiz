@@ -14,3 +14,5 @@ exports.answer = function(req, res, next) {
   res.render('quizes/answer', {result: result, respuesta: respuesta});
 }; 
 
+
+
