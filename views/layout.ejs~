@@ -21,8 +21,8 @@
     <div><%- body %></div>
   </section>
   <footer class="main">
-    <a href = "https://es.wikipedia.org/wiki/Quiz"> ¿Qué es un Quiz?</a>
-    <a href = "https://github.com/hosnia11/Quiz"> Proyecto en GitHub</a>
+    <p><a href = "https://es.wikipedia.org/wiki/Quiz"> ¿Qué es un Quiz?</a></p>
+    <p><a href = "https://github.com/hosnia11/Quiz"> Proyecto en GitHub</a></p>
   </footer>
 </body>
 </html>
