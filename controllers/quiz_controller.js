@@ -4,7 +4,10 @@ var models = require('../models');
 // GET /quizes
 
 exports.index = function(req, res, next) {
-	models.Quiz.findAll().then(function(quizes){
+	models.Quiz.findAll({
+		where: ["question like ?", '%'+req.query.search+'%']
+	  }
+	).then(function(quizes){
 		res.render('quizes/index.ejs', {quizes: quizes});
 	}).catch(function(error){
 		next(error);
