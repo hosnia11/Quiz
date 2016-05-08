@@ -19,7 +19,7 @@ exports.show = function(req, res, next) {
   	  var answer = req.query.answer || "";
   	  res.render('quizes/show', {quiz: quiz, answer: answer});
 	}else{
-	  throw new Error("No hay preguntas en las BBDD");
+	  throw new Error("No hay preguntas en las BBDD");}
 	}).catch(function(error){
 		next (error);
 	});
@@ -34,7 +34,7 @@ exports.check = function(req, res) {
   	  var result = answer === quiz.answer ? 'Correcta' : 'Incorrecta';
 	  res.render('quizes/result', {quiz: quiz, result: result, answer: answer});
 	}else{
-	  throw new Error("No hay preguntas en las BBDD");
+	  throw new Error("No hay preguntas en las BBDD");}
 	}).catch(function(error){
 		next (error);
 	});
