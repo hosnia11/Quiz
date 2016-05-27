@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/quizes', quizController.index);
 router.get('/quizes/:quizId(\\d+)', quizController.show);
-router.get('/quizes/:quizId(\\d+)/answer', quizController.result);
+router.get('/quizes/:quizId(\\d+)/check', quizController.check);
 
 /* GET author*/
 router.get('/author', function(req, res, next) {
