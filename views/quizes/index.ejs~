@@ -14,4 +14,4 @@
 	<% } %>
 </table>
 
-<a href="/new"><button type="button">Crear pregunta</button></a>
+<a href="/quizes/new"><button type="button">Crear pregunta</button></a>

@@ -67,6 +67,35 @@ exports.new = function(req, res, next) {
 	res.render('quizes/new', {quiz: quiz});
 };
 
+// GET /quizes/edit
+
+exports.edit = function(req, res, next){
+	var quiz = req.quiz;
+	res.render('quizes/edit', {quiz: quiz});
+};
+
+// GET /quizes/update
+
+exports.update = function(req, res, next){
+	req.quiz.question = req.body.quiz.question;
+	req.quiz.answer = req.body.quiz.answer;
+
+	req.quiz.save({fields: ["question", "answer"]}).then(function(quiz){
+		req.flash('success', 'Quiz editado con éxito');
+			res.redirect('/quizes');
+	}).catch(Sequelize.ValidationError, function(error){
+	req.flash('error', 'Errores en el formulario:');
+	for(var i in error.errors){
+		req.flash('error', error.errors[i].value);
+	};
+	res.render('quizes/edit', {quiz: req.quiz});
+	}).catch(function(error){
+	req.flash('error', 'Error al editar el Quiz: '+error.message); 
+	next(error);
+	});
+};
+
+
 // GET /quizes/create
 
 exports.create = function(req, res, next) {

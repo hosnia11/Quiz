@@ -1,5 +1,6 @@
 
 var models = require('../models');
+var Sequelize = require('sequelize');
 
 //load
 
@@ -64,6 +65,13 @@ exports.check = function(req, res) {
 exports.new = function(req, res, next) {
 	var quiz = models.Quiz.build({question: "", answer: ""});
 	res.render('quizes/new', {quiz: quiz});
+};
+
+// GET /quizes/edit
+
+exports.edit = function(req, res, next){
+	var quiz = req.quiz;
+	res.render('quizes/edit', {quiz: quiz});
 };
 
 // GET /quizes/create
