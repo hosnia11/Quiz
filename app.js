@@ -5,7 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var session = require('express-session');
 var partials = require('express-partials');
+var flash = require('express-flash');
 var routes = require('./routes/index');
 //var users = require('./routes/users');
 
@@ -25,6 +27,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({secret: "Quiz 2016", resave: false, saveUninitialized: true}));
+
+app.use(flash());
 
 app.use('/', routes);
 //app.use('/users', users);

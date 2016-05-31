@@ -69,7 +69,7 @@ exports.new = function(req, res, next) {
 // GET /quizes/create
 
 exports.create = function(req, res, next) {
-	var quiz = models.Quiz.build({question: req.body.quiz.question, answer: req.body.answer});
+	var quiz = models.Quiz.build({question: req.body.quiz.question, answer: req.body.quiz.answer});
 
 quiz.save({fields: ["question", "answer"]}).then(function(quiz){
 	res.redirect('/quizes');

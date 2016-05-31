@@ -16,7 +16,6 @@ body {font: 16px Georgia, serif;
 a {color: #00B7FF;}
 
 section > div {padding: 20px;}
-
 .mensajes {background: #eee;
 		color: black;}
 
