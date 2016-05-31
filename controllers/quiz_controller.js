@@ -3,7 +3,7 @@ var models = require('../models');
 
 //load
 
-exports.load = function(req, res, next) {
+exports.load = function(req, res, next, quizId) {
 	models.Quiz.findById(quizId).then(function(quiz){
 		if(quiz){
 			req.quiz = quiz;
@@ -59,4 +59,22 @@ exports.check = function(req, res) {
 	});
 };
  
+// GET /quizes/new
+
+exports.new = function(req, res, next) {
+	var quiz = models.Quiz.build({question: "", answer: ""});
+	res.render('quizes/new', {quiz: quiz});
+};
+
+// GET /quizes/create
+
+exports.create = function(req, res, next) {
+	var quiz = models.Quiz.build({question: req.body.quiz.question, answer: req.body.quiz.answer});
+
+quiz.save({fields: ["question", "answer"]}).then(function(quiz){
+	res.redirect('/quizes');
+}).catch(function(error){
+	next(error);
+});
+};
 
