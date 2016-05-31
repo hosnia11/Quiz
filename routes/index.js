@@ -17,6 +17,8 @@ router.get('/quizes/new', quizController.new);
 router.post('/quizes', quizController.create);
 router.get('/quizes/:quizId(\\d+)/edit', quizController.edit);
 router.put('/quizes/:quizId(\\d+)', quizController.update);
+router.delete('/quizes/:quizId(\\d+)', quizController.destroy);
+
 
 /* GET author*/
 router.get('/author', function(req, res, next) {

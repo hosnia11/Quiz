@@ -95,6 +95,18 @@ exports.update = function(req, res, next){
 	});
 };
 
+// GET /quizes/destroy
+
+exports.destroy = function(req, res, next) {
+	req.quiz.destroy().then(function(){
+		req.flash('success', 'Quiz borrado con éxito');
+		res.redirect('/quizes');
+	}).catch(function(error){
+	req.flash('error', 'Error al borrar el Quiz: '+error.message); 
+	next(error);
+	});
+};
+
 
 // GET /quizes/create
 
