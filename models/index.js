@@ -19,9 +19,15 @@ var sequelize = new Sequelize(url,
 				});
 
 var Quiz = sequelize.import(path.join(__dirname, 'quiz'));
+var Comment = sequelize.import(path.join(__dirname,'comment'));
+
+Comment.belongsTo(Quiz);
+Quiz.hasMany(Comment);
+
 
 
 
 exports.Quiz = Quiz;	
+exports.Comment = Comment;
 
 

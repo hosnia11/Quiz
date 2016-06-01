@@ -5,7 +5,7 @@ var Sequelize = require('sequelize');
 //load
 
 exports.load = function(req, res, next, quizId) {
-	models.Quiz.findById(quizId).then(function(quiz){
+	models.Quiz.findById(quizId, {include: [ models.Comment]}).then(function(quiz){
 		if(quiz){
 			req.quiz = quiz;
 			next();
@@ -54,6 +54,7 @@ exports.show = function(req, res, next) {
 	   }else{
   	      var answer = req.query.answer || "";
   	      res.render('quizes/show', {quiz: req.quiz, answer: answer});
+	   }
 	}else{
 	  throw new Error("No hay preguntas en las BBDD");}
 	}).catch(function(error){
