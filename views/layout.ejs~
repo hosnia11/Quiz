@@ -19,7 +19,7 @@
     <a href = "/author"> Créditos </a>
   </nav>
 
-<section>
+<section class="mensajes">
 	<% if (messages.info) { %>
 		<article id='flashinfo'>
 			<h3>Información de interés:</h3>
