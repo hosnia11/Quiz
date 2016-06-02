@@ -49,6 +49,22 @@ app.use(function(req, res, next) {
 });
 
 
+app.use(function(req, res, next){
+	var timeout = 60*1000*2;
+	var actual = new Date();
+	var user = req.session.user;
+	if(!user){
+		next();
+	}else if((actual.getTime() - user.tiempo) > timeout){
+		delete req.session.user;
+		next();
+	}else{
+		user.tiempo = new Date().getTime();
+		next();
+	}
+});
+	
+
 app.use('/', routes);
 //app.use('/users', users);
 
@@ -60,6 +76,8 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+
 
 // error handlers
 
