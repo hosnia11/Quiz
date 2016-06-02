@@ -13,6 +13,8 @@ router.get('/', function(req, res, next) {
 
 router.param('quizId', quizController.load);
 router.param('userId', userController.load); 
+router.param('commentId', commentController.load);
+
 
 router.get('/quizes.:format?', quizController.index);
 router.get('/quizes/:quizId(\\d+).:format?', quizController.show);
@@ -25,6 +27,7 @@ router.delete('/quizes/:quizId(\\d+)', sessionController.loginRequired, quizCont
 
 router.get('/quizes/:quizId(\\d+)/comments/new', sessionController.loginRequired, commentController.new);
 router.post('/quizes/:quizId(\\d+)/comments', sessionController.loginRequired, commentController.create);
+router.put('/quizes/:quizId(\\d+)/comments/:commentId(\\d+)/accept', sessionController.loginRequired, commentController.accept);
 
 router.get('/users', userController.index);   
 router.get('/users/:userId(\\d+)', userController.show);   
