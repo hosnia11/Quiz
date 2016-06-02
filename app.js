@@ -18,6 +18,19 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+// En produccion (Heroku) redirijo las peticiones http a https.
+// Documentacion: http://jaketrent.com/post/https-redirect-node-heroku/
+if (app.get('env') === 'production') {
+    app.use(function(req, res, next) {
+        if (req.headers['x-forwarded-proto'] !== 'https') {
+            res.redirect('https://' + req.get('Host') + req.url);
+        } else { 
+            next() /* Continue to other routes if we're not redirecting */
+        }
+    });
+}
+
 app.use(partials());
 
 // uncomment after placing your favicon in /public

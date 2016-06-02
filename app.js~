@@ -48,21 +48,22 @@ app.use(function(req, res, next) {
    next();
 });
 
-app.use(function(req, res, next) {
-  var user = req.session.user;
-  var now = new Date();
-  if(!user){
-    next();
-  }else if (now.getTime() - user.tiempo > 5000){
-    delete req.session.user;
-    next();
-  }else{
-    user.tiempo = new Date().getTime();
-    next();
-  }
+
+app.use(function(req, res, next){
+	var timeout = 60*1000*2;
+	var actual = new Date();
+	var user = req.session.user;
+	if(!user){
+		next();
+	}else if((actual.getTime() - user.tiempo) > timeout){
+		delete req.session.user;
+		next();
+	}else{
+		user.tiempo = new Date().getTime();
+		next();
+	}
 });
 	
-
 
 app.use('/', routes);
 //app.use('/users', users);
