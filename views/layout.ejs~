@@ -16,6 +16,7 @@
   <nav class="main" role="navigation">
     <a href = "/"> Inicio </a>&nbsp
     <a href = "/quizes"> Preguntas </a>&nbsp
+    <a href="/users">Usuarios</a>
     <a href = "/author"> Créditos </a>
   </nav>
 
