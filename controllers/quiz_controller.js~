@@ -1,11 +1,17 @@
 
 var models = require('../models');
 var Sequelize = require('sequelize');
+var cloudinary = require('cloudinary');
+var fs = require('fs');
+
+
+// Opciones para imagenes subidas a Cloudinary
+var cloudinary_image_options = { crop: 'limit', width: 200, height: 200, radius: 5, border: "3px_solid_blue", tags: ['core', 'quiz-2016'] };
 
 //load
 
 exports.load = function(req, res, next, quizId) {
-	models.Quiz.findById(quizId, {include: [ models.Comment]}).then(function(quiz){
+	models.Quiz.findById(quizId, {include: [ models.Comment, models.Attachment ]}).then(function(quiz){
 		if(quiz){
 			req.quiz = quiz;
 			next();
@@ -20,7 +26,7 @@ exports.load = function(req, res, next, quizId) {
 // MW que permite acciones solamente si al usuario logeado es admin o es el autor del quiz.
 exports.ownershipRequired = function(req, res, next){
 
-    var isAdmin      = req.session.user.isAdmin;
+    var isAdmin  = req.session.user.isAdmin;
     var quizAuthorId = req.quiz.AuthorId;
     var loggedUserId = req.session.user.id;
 
@@ -38,16 +44,17 @@ exports.ownershipRequired = function(req, res, next){
 exports.index = function(req, res, next) {
    if((req.params.format === "JSON" || req.params.format === "json")){
 	models.Quiz.findAll({order: 'question ASC',
-		where: ["question like ?", '%'+req.query.search+'%']
-	  }
-	).then(function(quizes){
+		where: ["question like ?", '%'+req.query.search+'%'],
+		include: [ models.Attachment ]
+	  }).then(function(quizes){
 		res.json('quizes/index.ejs', {quizes: quizes});
 	}).catch(function(error){
 		next(error);
 	});
    }else{
 	models.Quiz.findAll({order: 'question ASC',
-		where: ["question like ?", '%'+req.query.search+'%']
+		where: ["question like ?", '%'+req.query.search+'%'],
+		include: [ models.Attachment ]
 	  }
 	).then(function(quizes){
 		res.render('quizes/index.ejs', {quizes: quizes});
@@ -140,24 +147,51 @@ exports.destroy = function(req, res, next) {
 };
 
 
-// GET /quizes/create
-
+// POST /quizzes/create
 exports.create = function(req, res, next) {
-	var authorId = req.session.user && req.session.user.id || 0;
-	var quiz = models.Quiz.build({question: req.body.quiz.question, answer: req.body.quiz.answer, AuthorId: authorId});
 
-quiz.save({fields: ["question", "answer"]}).then(function(quiz){
-	req.flash('success', 'Quiz creado con éxito');
-	res.redirect('/quizes');
-}).catch(Sequelize.ValidationError, function(error){
-	req.flash('error', 'Errores en el formulario:');
-	for(var i in error.errors){
-		req.flash('error', error.errors[i].value);
-	};
-	res.render('quizes/new', {quiz: quiz});
-}).catch(function(error){
-	req.flash('error', 'Error al crear un Quiz: '+error.message); 
-	next(error);
-});
+    var authorId = req.session.user && req.session.user.id || 0;
+    var quiz = { question: req.body.question, 
+                 answer:   req.body.answer,
+                 AuthorId: authorId };
+
+    // Guarda en la tabla Quizzes el nuevo quiz.
+    models.Quiz.create(quiz).then(function(quiz) {
+        req.flash('success', 'Pregunta y Respuesta guardadas con éxito.');
+
+        if (!req.file) { 
+            req.flash('info', 'Es un Quiz sin imagen.');
+            return; 
+        }    
+
+        // Salvar la imagen en Cloudinary
+        return uploadResourceToCloudinary(req.file.path).then(function(uploadResult) {
+            // Crear y guardar el nuevo attachment en la BBDD.
+            if (uploadResult) {
+                return models.Attachment.create({ public_id: uploadResult.public_id,
+                                                  url: uploadResult.url,
+                                                  filename: req.file.originalname,
+                                                  mime: req.file.mimetype,
+                                                  QuizId: quiz.id }).then(function(attachment) {
+                    req.flash('success', 'Imagen nueva guardada con éxito.');
+                }).catch(function(error) { // Ignoro errores de validacion en imagenes
+                    req.flash('error', 'No se ha podido salvar la nueva imagen: '+error.message);
+                    cloudinary.api.delete_resources(uploadResult.public_id);
+                });
+            }
+        });
+    }).then(function() {
+        res.redirect('/quizzes');
+    }).catch(Sequelize.ValidationError, function(error) {
+        req.flash('error', 'Errores en el formulario:');
+        for (var i in error.errors) {
+            req.flash('error', error.errors[i].value);
+        };
+  
+        res.render('quizzes/new', {quiz: quiz});
+    }).catch(function(error) {
+        req.flash('error', 'Error al crear un Quiz: '+error.message);
+        next(error);
+    }); 
 };
 
