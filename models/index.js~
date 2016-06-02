@@ -30,5 +30,6 @@ Quiz.hasMany(Comment);
 
 exports.Quiz = Quiz;	
 exports.Comment = Comment;
+exports.User = User;
 
 
