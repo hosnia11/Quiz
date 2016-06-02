@@ -33,6 +33,9 @@ router.get('/users/:userId(\\d+)/edit', userController.edit);
 router.put('/users/:userId(\\d+)', userController.update);   
 router.delete('/users/:userId(\\d+)', userController.destroy);
 
+router.get('/session',    sessionController.new);  
+router.post('/session',   sessionController.create); 
+router.delete('/session', sessionController.destroy);
 
 /* GET author*/
 router.get('/author', function(req, res, next) {

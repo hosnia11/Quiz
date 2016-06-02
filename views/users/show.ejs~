@@ -24,7 +24,6 @@
       </a>
   </p>
 <% } %>
-
 <a href="/users"> 
    <button type="button">Volver</button>
 </a>

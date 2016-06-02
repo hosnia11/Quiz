@@ -3,6 +3,14 @@ var models = require('../models');
 var Sequelize = require('sequelize');
 var url = require('url');
 
+exports.loginRequired = function (req, res, next) {
+    if (req.session.user) {
+        next();
+    } else {
+        res.redirect('/session?redir=' + (req.param('redir') || req.url));
+    }
+};
+
 var authenticate = function(login, password) {
     
     return models.User.findOne({where: {username: login}}).then(function(user) {

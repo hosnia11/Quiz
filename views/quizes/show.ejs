@@ -8,7 +8,9 @@
 
 </p>
 
+<% if (session.user) { %>
 <p> <a href="/quizes/<%= quiz.id %>/comments/new"><button>Nuevo comentario</button></a></p>
+<% } %>
 
 <p><strong>Comentario:</strong></p>
 <ul>
