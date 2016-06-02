@@ -20,27 +20,24 @@
   </form>
 </p>
 
-<p><strong>Comentario:</strong></p>
+<p><strong>Comentarios:</strong></p>
 
 <% if (session.user) { %>
-<p> <a href="/quizes/<%= quiz.id %>/comments/new"><button>Nuevo comentario</button></a></p>
+  <p>
+    <a href="/quizes/<%= quiz.id %>/comments/new"><button>Nuevo comentario</button></a>
+  </p>
 <% } %>
 
 <ul>
-<% for (var i in quiz.Comments) {
-	var comment = quiz.Comments[i];
+  <% for (var i in quiz.Comments) { 
+       var comment = quiz.Comments[i];
        if (comment.accepted) { %>
-
-	 <li> <%= comment.text %> Autor: <%= comment.AuthorId %></li>
-
-       <% } else if (session.user && (session.user.isAdmin ||(quiz.AuthorId === session.user.id))) { %>
-
+           <li> <%= comment.text %>  </li>
+       <% } else if (session.user) { %>
            <li> <%= comment.text %> </li>
-
-           <a href="/quizes/<%= quiz.id %>/comments/<%= comment.id %>/accept?_method=PUT">
+           <a href="/quizes/<%= quiz.id %>/comments/<%= quiz.Comments[i].id %>/accept?_method=PUT">
               <button>Aceptar</button>
            </a>
        <% } %>
   <% } %>
 </ul>
-
