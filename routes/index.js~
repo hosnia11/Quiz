@@ -21,20 +21,22 @@ router.get('/quizes/:quizId(\\d+).:format?', quizController.show);
 router.get('/quizes/:quizId(\\d+)/check', quizController.check);
 router.get('/quizes/new', sessionController.loginRequired, quizController.new);
 router.post('/quizes', sessionController.loginRequired, quizController.create);
-router.get('/quizes/:quizId(\\d+)/edit', sessionController.loginRequired, quizController.edit);
-router.put('/quizes/:quizId(\\d+)', sessionController.loginRequired, quizController.update);
-router.delete('/quizes/:quizId(\\d+)', sessionController.loginRequired, quizController.destroy);
+router.get('/quizes/:quizId(\\d+)/edit', sessionController.loginRequired, quizController.ownershipRequired, quizController.edit);
+router.put('/quizes/:quizId(\\d+)', sessionController.loginRequired, quizController.ownershipRequired, quizController.update);
+router.delete('/quizes/:quizId(\\d+)', sessionController.loginRequired, quizController.ownershipRequired, quizController.destroy);
 
 router.get('/quizes/:quizId(\\d+)/comments/new', sessionController.loginRequired, commentController.new);
 router.post('/quizes/:quizId(\\d+)/comments', sessionController.loginRequired, commentController.create);
+router.put('/quizes/:quizId(\\d+)/comments/:commentId(\\d+)/accept', sessionController.loginRequired, sessionController.adminOrMyselfRequired, commentController.accept);
 
 router.get('/users', userController.index);   
 router.get('/users/:userId(\\d+)', userController.show);   
 router.get('/users/new', userController.new);    
-router.post('/users', userController.create);  
-router.get('/users/:userId(\\d+)/edit', sessionController.loginRequired, userController.edit);     
-router.put('/users/:userId(\\d+)', sessionController.loginRequired, userController.update);   
-router.delete('/users/:userId(\\d+)', sessionController.loginRequired, userController.destroy);
+router.post('/users', userController.create);
+  
+router.get('/users/:userId(\\d+)/edit', sessionController.loginRequired, sessionController.adminOrMyselfRequired, userController.edit);     
+router.put('/users/:userId(\\d+)', sessionController.loginRequired, sessionController.adminOrMyselfRequired, userController.update);   
+router.delete('/users/:userId(\\d+)', sessionController.loginRequired, sessionController.adminAndNotMyselfRequired, userController.destroy);
 
 router.get('/session',    sessionController.new);  
 router.post('/session',   sessionController.create); 
